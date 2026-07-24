@@ -1,0 +1,7 @@
+*.tgz
+*.tar.gz
+.env
+*.pem
+*.key
+kubeconfig
+alloy/data/
