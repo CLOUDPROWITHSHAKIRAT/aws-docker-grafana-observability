@@ -114,7 +114,7 @@ image:
   #   - myRegistrKeySecretName
 
 testFramework:
-  enabled: true
+  enabled: false
   ## The type of Helm hook used to run this test. Defaults to test.
   ## ref: https://helm.sh/docs/topics/charts_hooks/#the-available-hooks
   ##
@@ -232,7 +232,7 @@ gossipPortName: gossip
 ##
 service:
   enabled: true
-  type: ClusterIP
+  type: LoadBalancer
   # Set the ip family policy to configure dual-stack see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services)
   ipFamilyPolicy: ""
   # Sets the families that should be supported and the order in which they should be applied to ClusterIP as well. Can be IPv4 and/or IPv6.
@@ -359,7 +359,13 @@ route:
     ## Ref. https://gateway-api.sigs.k8s.io/guides/http-redirect-rewrite/
     httpsRedirect: false
 
-resources: {}
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
 #  limits:
 #    cpu: 100m
 #    memory: 128Mi
@@ -423,7 +429,11 @@ extraContainerVolumes: []
 ##
 persistence:
   type: pvc
-  enabled: false
+  enabled: true
+  storageClassName: gp3
+  accessModes:
+    - ReadWriteOnce
+  size: 10Gi
   # storageClassName: default
   ## (Optional) Use this to bind the claim to an existing PersistentVolume (PV) by name.
   volumeName: ""
@@ -497,7 +507,7 @@ initChownData:
 
 # Administrator credentials when not using an existing secret (see below)
 adminUser: admin
-# adminPassword: strongpassword
+adminPassword: ChangeMe123!
 
 # Use an existing secret for the admin user.
 admin:
